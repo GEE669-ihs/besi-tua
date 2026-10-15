@@ -3,14 +3,14 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Masuk · Nama Usaha</title>
+  <title>Masuk · UD.Bali Sejahtera</title>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="{% static 'css/app.css' %}">
 </head>
 <body class="halaman-masuk">
 <main class="kartu-masuk">
-  <h1 class="judul-halaman">Masuk</h1>
-  <p class="sub">Catatan pembelian Nama Usaha</p>
+  <h1 class="judul-halaman">Login</h1>
+  <p class="sub">UD.Bali Sejahtera</p>
   <form method="post">{% csrf_token %}
     {{ form.non_field_errors }}
     <label for="id_username">Nama pengguna</label>
