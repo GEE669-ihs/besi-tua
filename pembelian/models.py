@@ -6,7 +6,8 @@ class Lapak(models.Model):
     catatan = models.TextField(blank=True)
 
     class Meta:
-        verbose_name_plural = "lapak"
+        verbose_name = "ranting"
+        verbose_name_plural = "ranting"
 
     def __str__(self):
         return self.nama

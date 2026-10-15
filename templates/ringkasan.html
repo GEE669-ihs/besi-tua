@@ -29,7 +29,7 @@
 
 <h2>Nota pada tanggal ini</h2>
 <div class="gulir"><table class="tabel">
-  <thead><tr><th>Lapak</th><th class="kanan">Total</th></tr></thead>
+  <thead><tr><th>Ranting</th><th class="kanan">Total</th></tr></thead>
   <tbody>
   {% for n in nota_terbaru %}
     <tr><td><a href="{% url 'detail_nota' n.pk %}">{{ n.lapak }}</a></td>

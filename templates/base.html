@@ -23,8 +23,8 @@
       <a href="{% url 'daftar_nota' %}" class="{% if u == 'daftar_nota' or u == 'detail_nota' %}aktif{% endif %}">Nota pembelian</a>
       <a href="{% url 'nota_baru' %}" class="{% if u == 'nota_baru' %}aktif{% endif %}">Nota baru</a>
       <h3>Data</h3>
-      <a href="{% url 'admin:pembelian_barang_changelist' %}">Barang dan harga</a>
-      <a href="{% url 'admin:pembelian_lapak_changelist' %}">Lapak</a>
+      <a href="{% url 'daftar_barang' %}" class="{% if '/barang/' in request.path %}aktif{% endif %}">Barang dan harga</a>
+      <a href="{% url 'daftar_ranting' %}" class="{% if '/ranting/' in request.path %}aktif{% endif %}">Ranting</a>
       <h3>Segera</h3>
       <span class="segera">Penjualan ke pabrik</span>
       <span class="segera">Stok</span>
@@ -48,8 +48,8 @@
 <nav class="bawah">
   <a href="{% url 'ringkasan' %}" class="{% if u == 'ringkasan' %}aktif{% endif %}">Ringkasan</a>
   <a href="{% url 'daftar_nota' %}" class="{% if u == 'daftar_nota' or u == 'detail_nota' %}aktif{% endif %}">Nota</a>
-  <a href="{% url 'admin:pembelian_barang_changelist' %}">Barang</a>
-  <a href="{% url 'admin:pembelian_lapak_changelist' %}">Lapak</a>
+  <a href="{% url 'daftar_barang' %}" class="{% if '/barang/' in request.path %}aktif{% endif %}">Barang</a>
+  <a href="{% url 'daftar_ranting' %}" class="{% if '/ranting/' in request.path %}aktif{% endif %}">Ranting</a>
 </nav>
 {% endwith %}
 {% block skrip %}{% endblock %}

@@ -4,7 +4,7 @@
 <h1 class="judul-halaman">Nota pembelian</h1>
 <p class="sub">100 nota terbaru</p>
 <div class="gulir"><table class="tabel">
-  <thead><tr><th>Tanggal</th><th>Lapak</th><th class="kanan">Jenis barang</th><th class="kanan">Total</th></tr></thead>
+  <thead><tr><th>Tanggal</th><th>Ranting</th><th class="kanan">Jenis barang</th><th class="kanan">Total</th></tr></thead>
   <tbody>
   {% for n in nota %}
     <tr><td>{{ n.tanggal|date:"j M Y" }}</td>

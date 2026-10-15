@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block judul %}Ranting{% endblock %}
+{% block konten %}
+<div class="bar-judul">
+  <div>
+    <h1 class="judul-halaman">Ranting</h1>
+    <p class="sub">Daftar ranting yang menjual ke kita, beserta ringkasan pembeliannya.</p>
+  </div>
+  <a class="tombol" href="{% url 'ranting_baru' %}">+ Ranting baru</a>
+</div>
+
+{% if ranting %}
+<div class="gulir"><table class="tabel">
+  <thead><tr>
+    <th>Ranting</th><th class="kanan">Jumlah nota</th><th class="kanan">Total pembelian</th><th>Terakhir beli</th><th></th>
+  </tr></thead>
+  <tbody>
+  {% for r in ranting %}
+    <tr>
+      <td>{{ r.nama }}{% if r.catatan %}<br><span class="redup">{{ r.catatan|truncatechars:60 }}</span>{% endif %}</td>
+      <td class="kanan">{{ r.jumlah_nota }}</td>
+      <td class="kanan">Rp {{ r.total|default:0|floatformat:"0g" }}</td>
+      <td>{% if r.terakhir %}{{ r.terakhir|date:"j M Y" }}{% else %}<span class="redup">Belum ada</span>{% endif %}</td>
+      <td class="kanan aksi-sel">
+        {% if r.jumlah_nota %}<a href="{% url 'daftar_nota' %}?ranting={{ r.pk }}">Lihat nota</a>{% endif %}
+        <a href="{% url 'ubah_ranting' r.pk %}">Ubah</a>
+        {% if r.jumlah_nota == 0 %}<a class="bahaya" href="{% url 'hapus_ranting' r.pk %}">Hapus</a>{% endif %}
+      </td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table></div>
+{% else %}
+<p class="kosong">Belum ada ranting. Tambahkan ranting pertama untuk mulai mencatat nota.</p>
+{% endif %}
+{% endblock %}

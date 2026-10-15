@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block judul %}Barang dan harga{% endblock %}
+{% block konten %}
+<div class="bar-judul">
+  <div>
+    <h1 class="judul-halaman">Barang dan harga</h1>
+    <p class="sub">Harga di sini terisi otomatis saat mencatat nota baru.</p>
+  </div>
+  <a class="tombol" href="{% url 'barang_baru' %}">+ Barang baru</a>
+</div>
+
+{% if barang %}
+<div class="gulir"><table class="tabel">
+  <thead><tr><th>Barang</th><th class="kanan">Harga per kg</th><th class="kanan">Dipakai di nota</th><th></th></tr></thead>
+  <tbody>
+  {% for b in barang %}
+    <tr>
+      <td>{{ b.nama }}</td>
+      <td class="kanan">Rp {{ b.harga_default|floatformat:"0g" }}</td>
+      <td class="kanan">{{ b.dipakai }}</td>
+      <td class="kanan aksi-sel">
+        <a href="{% url 'ubah_barang' b.pk %}">Ubah</a>
+        {% if b.dipakai == 0 %}<a class="bahaya" href="{% url 'hapus_barang' b.pk %}">Hapus</a>{% endif %}
+      </td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table></div>
+{% else %}
+<p class="kosong">Belum ada barang. Tambahkan barang pertama beserta harga per kg-nya.</p>
+{% endif %}
+{% endblock %}

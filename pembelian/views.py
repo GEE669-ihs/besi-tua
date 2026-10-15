@@ -1,13 +1,18 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.messages.views import SuccessMessageMixin
 from django.db import transaction
-from django.db.models import DecimalField, ExpressionWrapper, F, Sum
+from django.db.models import Count, DecimalField, ExpressionWrapper, F, Max, Sum
+from django.db.models.deletion import ProtectedError
 from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse_lazy
 from django.utils import timezone
 from django.utils.dateparse import parse_date
+from django.views.generic import CreateView, DeleteView, ListView, UpdateView
 
-from .forms import ItemNotaFormSet, NotaForm
-from .models import Barang, ItemNota, Nota
+from .forms import BarangForm, ItemNotaFormSet, NotaForm, RantingForm
+from .models import Barang, ItemNota, Lapak, Nota
 
 JUMLAH = ExpressionWrapper(
     F("berat_kg") * F("harga_per_kg"),
@@ -42,8 +47,11 @@ def ringkasan(request):
 
 @login_required
 def daftar_nota(request):
-    nota = Nota.objects.select_related("lapak").prefetch_related("items")[:100]
-    return render(request, "daftar_nota.html", {"nota": nota})
+    nota = Nota.objects.select_related("lapak").prefetch_related("items")
+    ranting_id = request.GET.get("ranting", "")
+    if ranting_id.isdigit():
+        nota = nota.filter(lapak_id=ranting_id)
+    return render(request, "daftar_nota.html", {"nota": nota[:100]})
 
 
 @login_required
@@ -74,3 +82,100 @@ def detail_nota(request, pk):
         Nota.objects.select_related("lapak").prefetch_related("items__barang"), pk=pk
     )
     return render(request, "detail_nota.html", {"nota": nota})
+
+# ---------- Barang dan harga ----------
+
+class DaftarBarang(LoginRequiredMixin, ListView):
+    template_name = "data/daftar_barang.html"
+    context_object_name = "barang"
+
+    def get_queryset(self):
+        return Barang.objects.annotate(
+            dipakai=Count("itemnota__nota", distinct=True)
+        ).order_by("nama")
+
+
+class BarangBaru(LoginRequiredMixin, SuccessMessageMixin, CreateView):
+    model = Barang
+    form_class = BarangForm
+    template_name = "data/form.html"
+    success_url = reverse_lazy("daftar_barang")
+    success_message = "Barang tersimpan."
+    extra_context = {"judul": "Barang baru", "batal": "daftar_barang"}
+
+
+class UbahBarang(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
+    model = Barang
+    form_class = BarangForm
+    template_name = "data/form.html"
+    success_url = reverse_lazy("daftar_barang")
+    success_message = "Perubahan tersimpan."
+    extra_context = {"judul": "Ubah barang", "batal": "daftar_barang"}
+
+
+class HapusDenganPesan(LoginRequiredMixin, DeleteView):
+    """Hapus data. Kalau sudah dipakai di nota, batalkan dan beri tahu."""
+    template_name = "data/hapus.html"
+    pesan_dipakai = ""
+    pesan_sukses = ""
+
+    def form_valid(self, form):
+        try:
+            response = super().form_valid(form)
+        except ProtectedError:
+            messages.error(self.request, self.pesan_dipakai)
+            return redirect(self.success_url)
+        messages.success(self.request, self.pesan_sukses)
+        return response
+
+
+class HapusBarang(HapusDenganPesan):
+    model = Barang
+    success_url = reverse_lazy("daftar_barang")
+    extra_context = {"jenis": "barang", "batal": "daftar_barang"}
+    pesan_dipakai = "Barang ini sudah dipakai di nota, jadi tidak bisa dihapus."
+    pesan_sukses = "Barang dihapus."
+
+
+# ---------- Ranting ----------
+
+class DaftarRanting(LoginRequiredMixin, ListView):
+    template_name = "data/daftar_ranting.html"
+    context_object_name = "ranting"
+
+    def get_queryset(self):
+        nilai = ExpressionWrapper(
+            F("nota__items__berat_kg") * F("nota__items__harga_per_kg"),
+            output_field=DecimalField(max_digits=16, decimal_places=1),
+        )
+        return Lapak.objects.annotate(
+            jumlah_nota=Count("nota", distinct=True),
+            total=Sum(nilai),
+            terakhir=Max("nota__tanggal"),
+        ).order_by("nama")
+
+
+class RantingBaru(LoginRequiredMixin, SuccessMessageMixin, CreateView):
+    model = Lapak
+    form_class = RantingForm
+    template_name = "data/form.html"
+    success_url = reverse_lazy("daftar_ranting")
+    success_message = "Ranting tersimpan."
+    extra_context = {"judul": "Ranting baru", "batal": "daftar_ranting"}
+
+
+class UbahRanting(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
+    model = Lapak
+    form_class = RantingForm
+    template_name = "data/form.html"
+    success_url = reverse_lazy("daftar_ranting")
+    success_message = "Perubahan tersimpan."
+    extra_context = {"judul": "Ubah ranting", "batal": "daftar_ranting"}
+
+
+class HapusRanting(HapusDenganPesan):
+    model = Lapak
+    success_url = reverse_lazy("daftar_ranting")
+    extra_context = {"jenis": "ranting", "batal": "daftar_ranting"}
+    pesan_dipakai = "Ranting ini sudah punya nota, jadi tidak bisa dihapus."
+    pesan_sukses = "Ranting dihapus."

@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block judul %}Hapus {{ jenis }}{% endblock %}
+{% block konten %}
+<h1 class="judul-halaman">Hapus {{ jenis }}?</h1>
+<p class="sub">“{{ object }}” akan dihapus permanen.</p>
+<form method="post" class="kartu-form">
+  {% csrf_token %}
+  <div class="aksi">
+    <button type="submit" class="tombol bahaya">Ya, hapus</button>
+    <a class="tombol sekunder" href="{% url batal %}">Batal</a>
+  </div>
+</form>
+{% endblock %}
