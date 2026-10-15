@@ -9,8 +9,9 @@
 
 <section class="ringkas">
   <p class="sub">Total pembelian, {{ tanggal|date:"l, j F Y" }}</p>
-  <p class="angka-besar">Rp {{ total|floatformat:"0g" }}</p>
-  <p class="sub">{{ berat|floatformat:"-1g" }} kg dari {{ jumlah_nota }} nota</p>
+    <p class="angka-besar" data-hitung="{{ total|stringformat:'d' }}">Rp {{ total|floatformat:"0g" }}</p>
+   <p class="sub">{{ berat|floatformat:"-1g" }} kg dari {{ jumlah_nota }} nota</p>
+   <div class="garis-sapu"></div>
 </section>
 
 {% if per_barang %}
@@ -31,7 +32,7 @@
   <thead><tr><th>Lapak</th><th class="kanan">Total</th></tr></thead>
   <tbody>
   {% for n in nota_terbaru %}
-    <tr><td><a href="{% url 'admin:pembelian_nota_change' n.pk %}">{{ n.lapak }}</a></td>
+    <tr><td><a href="{% url 'detail_nota' n.pk %}">{{ n.lapak }}</a></td>
         <td class="kanan">Rp {{ n.total|floatformat:"0g" }}</td></tr>
   {% endfor %}
   </tbody>

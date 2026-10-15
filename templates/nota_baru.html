@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% load static %}
+{% block judul %}Nota baru{% endblock %}
+{% block konten %}
+<h1 class="judul-halaman">Nota baru</h1>
+<p class="sub">Catat pembelian dari satu lapak.</p>
+
+<form method="post" novalidate>
+  {% csrf_token %}
+  {{ formset.management_form }}
+  {{ form.non_field_errors }}
+  <div class="baris-kepala" style="margin-top:22px">
+    <div class="isian">
+      <label for="{{ form.lapak.id_for_label }}">Lapak</label>
+      {{ form.lapak }}{{ form.lapak.errors }}
+    </div>
+    <div class="isian">
+      <label for="{{ form.tanggal.id_for_label }}">Tanggal</label>
+      {{ form.tanggal }}{{ form.tanggal.errors }}
+    </div>
+  </div>
+
+  <h2>Barang</h2>
+  {{ formset.non_form_errors }}
+  <div id="daftar-baris">
+    {% for f in formset %}{% include "_baris_item.html" with f=f %}{% endfor %}
+  </div>
+  <button type="button" id="tambah-baris" class="tombol sekunder">+ Tambah barang</button>
+
+  <div class="total-bar">
+    <div>
+      <span class="sub">Total nota</span>
+      <div class="angka-besar" id="total-nota">Rp 0</div>
+    </div>
+    <button type="submit" class="tombol besar">Simpan nota</button>
+  </div>
+</form>
+
+<template id="baris-kosong">{% include "_baris_item.html" with f=formset.empty_form %}</template>
+{{ harga_barang|json_script:"harga-barang" }}
+{% endblock %}
+{% block skrip %}<script src="{% static 'js/nota_baru.js' %}" defer></script>{% endblock %}

@@ -1,0 +1,20 @@
+<div class="baris-item">
+  {% for h in f.hidden_fields %}{{ h }}{% endfor %}
+  <div class="isian">
+    <label for="{{ f.barang.id_for_label }}">Barang</label>
+    {{ f.barang }}{{ f.barang.errors }}
+  </div>
+  <div class="isian">
+    <label for="{{ f.berat_kg.id_for_label }}">Berat (kg)</label>
+    {{ f.berat_kg }}{{ f.berat_kg.errors }}
+  </div>
+  <div class="isian">
+    <label for="{{ f.harga_per_kg.id_for_label }}">Harga per kg</label>
+    {{ f.harga_per_kg }}{{ f.harga_per_kg.errors }}
+  </div>
+  <div class="isian jumlah">
+    <span class="label">Jumlah</span>
+    <output class="jumlah-baris">Rp 0</output>
+  </div>
+  <button type="button" class="hapus-baris" aria-label="Hapus baris">×</button>
+</div>

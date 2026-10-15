@@ -8,7 +8,7 @@
   <tbody>
   {% for n in nota %}
     <tr><td>{{ n.tanggal|date:"j M Y" }}</td>
-        <td><a href="{% url 'admin:pembelian_nota_change' n.pk %}">{{ n.lapak }}</a></td>
+        <td><a href="{% url 'detail_nota' n.pk %}">{{ n.lapak }}</a></td>
         <td class="kanan">{{ n.items.all|length }}</td>
         <td class="kanan">Rp {{ n.total|floatformat:"0g" }}</td></tr>
   {% empty %}
