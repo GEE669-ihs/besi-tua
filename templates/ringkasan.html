@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block judul %}Ringkasan{% endblock %}
+{% block konten %}
+<h1 class="judul-halaman">Ringkasan</h1>
+<form method="get" class="pilih-tanggal">
+  <input type="date" name="tanggal" value="{{ tanggal|date:'Y-m-d' }}">
+  <button type="submit" class="tombol sekunder">Tampilkan</button>
+</form>
+
+<section class="ringkas">
+  <p class="sub">Total pembelian, {{ tanggal|date:"l, j F Y" }}</p>
+  <p class="angka-besar">Rp {{ total|floatformat:"0g" }}</p>
+  <p class="sub">{{ berat|floatformat:"-1g" }} kg dari {{ jumlah_nota }} nota</p>
+</section>
+
+{% if per_barang %}
+<h2>Per barang</h2>
+<div class="gulir"><table class="tabel">
+  <thead><tr><th>Barang</th><th class="kanan">Berat (kg)</th><th class="kanan">Nilai</th></tr></thead>
+  <tbody>
+  {% for b in per_barang %}
+    <tr><td>{{ b.barang__nama }}</td>
+        <td class="kanan">{{ b.berat|floatformat:"-1g" }}</td>
+        <td class="kanan">Rp {{ b.nilai|floatformat:"0g" }}</td></tr>
+  {% endfor %}
+  </tbody>
+</table></div>
+
+<h2>Nota pada tanggal ini</h2>
+<div class="gulir"><table class="tabel">
+  <thead><tr><th>Lapak</th><th class="kanan">Total</th></tr></thead>
+  <tbody>
+  {% for n in nota_terbaru %}
+    <tr><td><a href="{% url 'admin:pembelian_nota_change' n.pk %}">{{ n.lapak }}</a></td>
+        <td class="kanan">Rp {{ n.total|floatformat:"0g" }}</td></tr>
+  {% endfor %}
+  </tbody>
+</table></div>
+{% else %}
+<p class="kosong">Belum ada pembelian pada tanggal ini. Tambahkan nota baru untuk mulai mencatat.</p>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,50 @@
+{% load static %}<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block judul %}{% endblock %} · UD.Bali Sejahtera</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'css/app.css' %}">
+</head>
+<body>
+{% with u=request.resolver_match.url_name %}
+<div class="rangka">
+  <aside class="samping">
+    <div class="merek">UD.Bali Sejahtera<small>Pembelian dan stok</small></div>
+    <nav class="menu">
+      <h3>Harian</h3>
+      <a href="{% url 'ringkasan' %}" class="{% if u == 'ringkasan' %}aktif{% endif %}">Ringkasan</a>
+      <a href="{% url 'daftar_nota' %}" class="{% if u == 'daftar_nota' %}aktif{% endif %}">Nota pembelian</a>
+      <a href="{% url 'admin:pembelian_nota_add' %}">Nota baru</a>
+      <h3>Data</h3>
+      <a href="{% url 'admin:pembelian_barang_changelist' %}">Barang dan harga</a>
+      <a href="{% url 'admin:pembelian_lapak_changelist' %}">Lapak</a>
+      <h3>Segera</h3>
+      <span class="segera">Penjualan ke pabrik</span>
+      <span class="segera">Stok</span>
+      <span class="segera">Laporan</span>
+    </nav>
+    <div class="akun">
+      <span>{{ request.user.get_username }}</span>
+      <form method="post" action="{% url 'logout' %}">{% csrf_token %}
+        <button type="submit" class="keluar">Keluar</button>
+      </form>
+    </div>
+  </aside>
+
+  <main class="isi">{% block konten %}{% endblock %}</main>
+</div>
+
+<a class="tombol mengambang" href="{% url 'admin:pembelian_nota_add' %}">+ Nota baru</a>
+<nav class="bawah">
+  <a href="{% url 'ringkasan' %}" class="{% if u == 'ringkasan' %}aktif{% endif %}">Ringkasan</a>
+  <a href="{% url 'daftar_nota' %}" class="{% if u == 'daftar_nota' %}aktif{% endif %}">Nota</a>
+  <a href="{% url 'admin:pembelian_barang_changelist' %}">Barang</a>
+  <a href="{% url 'admin:pembelian_lapak_changelist' %}">Lapak</a>
+</nav>
+{% endwith %}
+</body>
+</html>
