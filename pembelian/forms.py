@@ -32,15 +32,15 @@ class ItemNotaForm(forms.ModelForm):
 
 ItemNotaFormSet = inlineformset_factory(
     Nota, ItemNota, form=ItemNotaForm,
-    extra=0, min_num=1, validate_min=True, can_delete=False,
+    extra=0, min_num=1, validate_min=True, can_delete=True,
 )
 
 
 class BarangForm(forms.ModelForm):
     class Meta:
         model = Barang
-        fields = ["nama", "harga_default"]
-        labels = {"nama": "Nama barang", "harga_default": "Harga per kg (Rp)"}
+        fields = ["nama", "kelompok", "harga_default"]
+        labels = {"nama": "Nama barang", "kelompok": "Kelompok", "harga_default": "Harga per kg (Rp)"}
         help_texts = {
             "harga_default": "Harga baru hanya berlaku untuk nota yang dibuat setelah ini. Nota lama tidak berubah."
         }

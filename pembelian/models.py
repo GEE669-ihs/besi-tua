@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.conf import settings    
 
 class Lapak(models.Model):
     nama = models.CharField(max_length=100)
@@ -14,9 +14,17 @@ class Lapak(models.Model):
 
 
 class Barang(models.Model):
-    nama = models.CharField(max_length=50)
-    harga_default = models.DecimalField(max_digits=10, decimal_places=0)
+    class Kelompok(models.TextChoices):
+        BESI = "besi", "Besi"
+        ALUMINIUM = "aluminium", "Aluminium"
+        TEMBAGA = "tembaga", "Tembaga"
+        KUNINGAN = "kuningan", "Kuningan"
+        LAINNYA = "lainnya", "Lainnya"
 
+    nama = models.CharField(max_length=50)
+    kelompok = models.CharField(max_length=20, choices=Kelompok.choices, default=Kelompok.LAINNYA)
+    harga_default = models.DecimalField(max_digits=10, decimal_places=0)
+    # (Meta dan __str__ tetap)
     class Meta:
         verbose_name_plural = "barang"
 
@@ -27,7 +35,14 @@ class Barang(models.Model):
 class Nota(models.Model):
     lapak = models.ForeignKey(Lapak, on_delete=models.PROTECT)
     tanggal = models.DateField()
-
+    dibatalkan = models.BooleanField(default=False)
+    alasan_batal = models.CharField(max_length=200, blank=True)
+    dibatalkan_pada = models.DateTimeField(null=True, blank=True)
+    dibatalkan_oleh = models.ForeignKey(
+        settings.AUTH_USER_MODEL, null=True, blank=True,
+        on_delete=models.SET_NULL, related_name="+",
+    )
+    
     class Meta:
         ordering = ["-tanggal", "-id"]
 

@@ -14,4 +14,6 @@ urlpatterns = [
     path("ranting/baru/", views.RantingBaru.as_view(), name="ranting_baru"),
     path("ranting/<int:pk>/ubah/", views.UbahRanting.as_view(), name="ubah_ranting"),
     path("ranting/<int:pk>/hapus/", views.HapusRanting.as_view(), name="hapus_ranting"),
+    path("nota/<int:pk>/ubah/", views.ubah_nota, name="ubah_nota"),
+    path("nota/<int:pk>/batalkan/", views.batalkan_nota, name="batalkan_nota"),
 ]

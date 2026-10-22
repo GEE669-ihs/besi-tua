@@ -22,9 +22,9 @@
       <td class="kanan">Rp {{ r.total|default:0|floatformat:"0g" }}</td>
       <td>{% if r.terakhir %}{{ r.terakhir|date:"j M Y" }}{% else %}<span class="redup">Belum ada</span>{% endif %}</td>
       <td class="kanan aksi-sel">
-        {% if r.jumlah_nota %}<a href="{% url 'daftar_nota' %}?ranting={{ r.pk }}">Lihat nota</a>{% endif %}
+        {% if r.semua_nota %}<a href="{% url 'daftar_nota' %}?ranting={{ r.pk }}">Lihat nota</a>{% endif %}
         <a href="{% url 'ubah_ranting' r.pk %}">Ubah</a>
-        {% if r.jumlah_nota == 0 %}<a class="bahaya" href="{% url 'hapus_ranting' r.pk %}">Hapus</a>{% endif %}
+        {% if r.semua_nota == 0 %}<a class="bahaya" href="{% url 'hapus_ranting' r.pk %}">Hapus</a>{% endif %}
       </td>
     </tr>
   {% endfor %}

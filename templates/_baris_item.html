@@ -1,6 +1,7 @@
-<div class="baris-item">
+<div class="baris-item{% if f.DELETE.value %} dihapus{% endif %}">
   {% for h in f.hidden_fields %}{{ h }}{% endfor %}
-  <div class="isian">
+  <div hidden>{{ f.DELETE }}</div>
+  <div class="isian isian-barang">
     <label for="{{ f.barang.id_for_label }}">Barang</label>
     {{ f.barang }}{{ f.barang.errors }}
   </div>
@@ -16,5 +17,5 @@
     <span class="label">Jumlah</span>
     <output class="jumlah-baris">Rp 0</output>
   </div>
-  <button type="button" class="hapus-baris" aria-label="Hapus baris">×</button>
+  <button type="button" class="hapus-baris" aria-label="Hapus baris">{% if f.DELETE.value %}↺{% else %}×{% endif %}</button>
 </div>

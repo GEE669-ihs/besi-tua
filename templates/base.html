@@ -20,7 +20,7 @@
     <nav class="menu">
       <h3>Harian</h3>
       <a href="{% url 'ringkasan' %}" class="{% if u == 'ringkasan' %}aktif{% endif %}">Ringkasan</a>
-      <a href="{% url 'daftar_nota' %}" class="{% if u == 'daftar_nota' or u == 'detail_nota' %}aktif{% endif %}">Nota pembelian</a>
+      <a href="{% url 'daftar_nota' %}" class="{% if u in 'daftar_nota detail_nota ubah_nota batalkan_nota' %}aktif{% endif %}">Nota pembelian</a>
       <a href="{% url 'nota_baru' %}" class="{% if u == 'nota_baru' %}aktif{% endif %}">Nota baru</a>
       <h3>Data</h3>
       <a href="{% url 'daftar_barang' %}" class="{% if '/barang/' in request.path %}aktif{% endif %}">Barang dan harga</a>
@@ -44,10 +44,10 @@
   </main>
 </div>
 
-{% if u != 'nota_baru' %}<a class="tombol mengambang" href="{% url 'nota_baru' %}">+ Nota baru</a>{% endif %}
+{% if u != 'nota_baru' and u != 'ubah_nota' %}<a class="tombol mengambang" href="{% url 'nota_baru' %}">+ Nota baru</a>{% endif %}
 <nav class="bawah">
   <a href="{% url 'ringkasan' %}" class="{% if u == 'ringkasan' %}aktif{% endif %}">Ringkasan</a>
-  <a href="{% url 'daftar_nota' %}" class="{% if u == 'daftar_nota' or u == 'detail_nota' %}aktif{% endif %}">Nota</a>
+  <a href="{% url 'daftar_nota' %}" class="{% if u in 'daftar_nota detail_nota ubah_nota batalkan_nota' %}aktif{% endif %}">Nota</a>
   <a href="{% url 'daftar_barang' %}" class="{% if '/barang/' in request.path %}aktif{% endif %}">Barang</a>
   <a href="{% url 'daftar_ranting' %}" class="{% if '/ranting/' in request.path %}aktif{% endif %}">Ranting</a>
 </nav>

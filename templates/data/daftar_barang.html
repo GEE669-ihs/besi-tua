@@ -11,13 +11,15 @@
 
 {% if barang %}
 <div class="gulir"><table class="tabel">
-  <thead><tr><th>Barang</th><th class="kanan">Harga per kg</th><th class="kanan">Dipakai di nota</th><th></th></tr></thead>
+  <thead><tr><th>Barang</th><th>Kelompok</th><th class="kanan">Harga per kg</th><th class="kanan">Dipakai di nota</th><th></th></tr></thead>
   <tbody>
   {% for b in barang %}
     <tr>
-      <td>{{ b.nama }}</td>
+      <td class="kel kel-{{ b.kelompok }}">{{ b.nama }}</td>
+      <td>{{ b.get_kelompok_display }}</td>
       <td class="kanan">Rp {{ b.harga_default|floatformat:"0g" }}</td>
       <td class="kanan">{{ b.dipakai }}</td>
+      <td>{{ b.get_kelompok_display }}</td>
       <td class="kanan aksi-sel">
         <a href="{% url 'ubah_barang' b.pk %}">Ubah</a>
         {% if b.dipakai == 0 %}<a class="bahaya" href="{% url 'hapus_barang' b.pk %}">Hapus</a>{% endif %}

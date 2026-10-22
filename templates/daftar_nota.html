@@ -3,14 +3,16 @@
 {% block konten %}
 <h1 class="judul-halaman">Nota pembelian</h1>
 <p class="sub">100 nota terbaru</p>
-<div class="gulir"><table class="tabel">
+<div class="gulir" style="margin-top:22px"><table class="tabel">
   <thead><tr><th>Tanggal</th><th>Ranting</th><th class="kanan">Jenis barang</th><th class="kanan">Total</th></tr></thead>
   <tbody>
   {% for n in nota %}
-    <tr><td>{{ n.tanggal|date:"j M Y" }}</td>
-        <td><a href="{% url 'detail_nota' n.pk %}">{{ n.lapak }}</a></td>
-        <td class="kanan">{{ n.items.all|length }}</td>
-        <td class="kanan">Rp {{ n.total|floatformat:"0g" }}</td></tr>
+    <tr {% if n.dibatalkan %}class="dicoret"{% endif %}>
+      <td>{{ n.tanggal|date:"j M Y" }}</td>
+      <td><a href="{% url 'detail_nota' n.pk %}">{{ n.lapak }}</a>{% if n.dibatalkan %} <span class="lencana">Dibatalkan</span>{% endif %}</td>
+      <td class="kanan">{{ n.items.all|length }}</td>
+      <td class="kanan">Rp {{ n.total|floatformat:"0g" }}</td>
+    </tr>
   {% empty %}
     <tr><td colspan="4" class="kosong">Belum ada nota.</td></tr>
   {% endfor %}

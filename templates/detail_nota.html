@@ -1,17 +1,24 @@
 {% extends "base.html" %}
 {% block judul %}Nota {{ nota.lapak }}{% endblock %}
 {% block konten %}
-<h1 class="judul-halaman">{{ nota.lapak }}</h1>
+<h1 class="judul-halaman">{{ nota.lapak }}{% if nota.dibatalkan %} <span class="lencana">Dibatalkan</span>{% endif %}</h1>
 <p class="sub">{{ nota.tanggal|date:"l, j F Y" }}</p>
 
-<div class="gulir" style="margin-top:22px"><table class="tabel">
+{% if nota.dibatalkan %}
+<div class="spanduk-batal">
+  Nota ini dibatalkan{% if nota.dibatalkan_oleh %} oleh {{ nota.dibatalkan_oleh.get_username }}{% endif %}{% if nota.dibatalkan_pada %} pada {{ nota.dibatalkan_pada|date:"j M Y, H:i" }}{% endif %}.
+  Alasan: {{ nota.alasan_batal }}. Nota ini tidak dihitung di ringkasan.
+</div>
+{% endif %}
+
+<div class="gulir {% if nota.dibatalkan %}dicoret{% endif %}" style="margin-top:22px"><table class="tabel">
   <thead><tr>
     <th>Barang</th><th class="kanan">Berat (kg)</th><th class="kanan">Harga per kg</th><th class="kanan">Jumlah</th>
   </tr></thead>
   <tbody>
   {% for i in nota.items.all %}
     <tr>
-      <td>{{ i.barang }}</td>
+      <td class="kel kel-{{ i.barang.kelompok }}">{{ i.barang }}</td>
       <td class="kanan">{{ i.berat_kg|floatformat:"-1g" }}</td>
       <td class="kanan">Rp {{ i.harga_per_kg|floatformat:"0g" }}</td>
       <td class="kanan">Rp {{ i.jumlah|floatformat:"0g" }}</td>
@@ -23,7 +30,10 @@
 
 <div class="aksi">
   <a class="tombol" href="{% url 'nota_baru' %}">Catat nota lain</a>
+  {% if not nota.dibatalkan %}
+  <a class="tombol sekunder" href="{% url 'ubah_nota' nota.pk %}">Ubah nota</a>
+  <a class="tombol sekunder" href="{% url 'batalkan_nota' nota.pk %}">Batalkan nota</a>
+  {% endif %}
   <a class="tombol sekunder" href="{% url 'daftar_nota' %}">Semua nota</a>
-  <a class="tombol sekunder" href="{% url 'admin:pembelian_nota_change' nota.pk %}">Ubah nota</a>
 </div>
 {% endblock %}

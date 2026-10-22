@@ -9,18 +9,28 @@
 
 <section class="ringkas">
   <p class="sub">Total pembelian, {{ tanggal|date:"l, j F Y" }}</p>
-    <p class="angka-besar" data-hitung="{{ total|stringformat:'d' }}">Rp {{ total|floatformat:"0g" }}</p>
-   <p class="sub">{{ berat|floatformat:"-1g" }} kg dari {{ jumlah_nota }} nota</p>
-   <div class="garis-sapu"></div>
+  <p class="angka-besar" data-hitung="{{ total|stringformat:'d' }}">Rp {{ total|floatformat:"0g" }}</p>
+  <p class="sub">{{ berat|floatformat:"-1g" }} kg dari {{ jumlah_nota }} nota</p>
+  <div class="garis-sapu"></div>
 </section>
 
 {% if per_barang %}
+<div class="per-kelompok">
+  {% for k in per_kelompok %}
+  <div class="kel-kartu kel-{{ k.kode }}">
+    <span class="sub">{{ k.nama }}</span>
+    <strong>Rp {{ k.nilai|floatformat:"0g" }}</strong>
+    <span class="sub">{{ k.berat|floatformat:"-1g" }} kg</span>
+  </div>
+  {% endfor %}
+</div>
+
 <h2>Per barang</h2>
 <div class="gulir"><table class="tabel">
   <thead><tr><th>Barang</th><th class="kanan">Berat (kg)</th><th class="kanan">Nilai</th></tr></thead>
   <tbody>
   {% for b in per_barang %}
-    <tr><td>{{ b.barang__nama }}</td>
+    <tr><td class="kel kel-{{ b.barang__kelompok }}">{{ b.barang__nama }}</td>
         <td class="kanan">{{ b.berat|floatformat:"-1g" }}</td>
         <td class="kanan">Rp {{ b.nilai|floatformat:"0g" }}</td></tr>
   {% endfor %}

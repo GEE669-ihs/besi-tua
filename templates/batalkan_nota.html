@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block judul %}Batalkan nota{% endblock %}
+{% block konten %}
+<h1 class="judul-halaman">Batalkan nota?</h1>
+<p class="sub">{{ nota.lapak }}, {{ nota.tanggal|date:"j F Y" }}, Rp {{ nota.total|floatformat:"0g" }}</p>
+<form method="post" class="kartu-form">
+  {% csrf_token %}
+  <p>Nota tidak dihapus. Ia ditandai dibatalkan dan tidak dihitung di ringkasan.</p>
+  <div class="isian">
+    <label for="alasan">Alasan pembatalan</label>
+    <input type="text" id="alasan" name="alasan" maxlength="200" placeholder="Misalnya: salah timbang, nota dobel" autofocus>
+    {% if galat %}<ul class="errorlist"><li>{{ galat }}</li></ul>{% endif %}
+  </div>
+  <div class="aksi">
+    <button type="submit" class="tombol bahaya">Batalkan nota</button>
+    <a class="tombol sekunder" href="{% url 'detail_nota' nota.pk %}">Kembali</a>
+  </div>
+</form>
+{% endblock %}
