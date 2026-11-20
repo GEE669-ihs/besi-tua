@@ -430,17 +430,21 @@ input:focus, select:focus, textarea:focus {
   box-shadow: 0 10px 25px rgba(0,0,0,0.15);
 }
 
-/* Navigasi Bawah & Floating Button Mobile */
+/* Navigasi Kapsul Mengambang (Default: tersembunyi di desktop) */
+.kepala-mobile {
+  display: none;
+}
+
 .tombol-mengambang {
   display: none;
 }
 
-.nav-bawah {
+.nav-kapsul-wrapper {
   display: none;
 }
 
-/* Responsif Mobile & Tablet */
-@media (max-width: 768px) {
+/* Responsif Mobile, Tablet & iPad Mini (max-width: 1024px) */
+@media (max-width: 1024px) {
   .rangka {
     display: block;
   }
@@ -449,13 +453,41 @@ input:focus, select:focus, textarea:focus {
     display: none;
   }
 
+  /* Header Atas Khusus Mobile & iPad Mini */
+  .kepala-mobile {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 18px;
+    background: #ffffff;
+    border-bottom: 1px solid var(--garis);
+    position: sticky;
+    top: 0;
+    z-index: 60;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  }
+
+  .lambang-mini {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--zamrud);
+    color: var(--champagne);
+    display: grid;
+    place-items: center;
+    font-family: "Source Serif 4", Georgia, serif;
+    font-weight: 600;
+    font-size: 0.95rem;
+    border: 1px solid var(--champagne);
+  }
+
   .isi {
-    padding: 20px 16px 88px;
+    padding: 20px 18px 110px;
   }
 
   .baris-item {
     grid-template-columns: 1fr 1fr;
-    gap: 10px;
+    gap: 12px;
   }
 
   .baris-item .kolom-barang {
@@ -467,49 +499,104 @@ input:focus, select:focus, textarea:focus {
     text-align: right;
   }
 
+  /* Floating Action Button (+ Nota Baru) */
   .tombol-mengambang {
-    display: flex;
+    display: inline-flex;
     position: fixed;
     right: 20px;
-    bottom: 74px;
+    bottom: 86px;
     background: var(--hijau);
-    color: #fff;
-    padding: 14px 20px;
+    color: #ffffff;
+    padding: 12px 20px;
     border-radius: 30px;
     font-weight: 600;
-    box-shadow: 0 4px 14px rgba(0,0,0,0.22);
+    font-size: 0.95rem;
+    box-shadow: 0 6px 18px rgba(12, 59, 46, 0.35);
     text-decoration: none;
-    z-index: 40;
+    z-index: 80;
     align-items: center;
     gap: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: transform 0.15s ease, background 0.15s ease;
   }
 
-  .nav-bawah {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
+  .tombol-mengambang:hover {
+    background: var(--hijau-tua);
+    transform: translateY(-2px);
+  }
+
+  /* Kapsul Menu Mengambang (Swipeable & Holdable) */
+  .nav-kapsul-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     position: fixed;
-    bottom: 0;
+    bottom: 16px;
     left: 0;
     right: 0;
-    background: var(--zamrud);
-    border-top: 1px solid rgba(255,255,255,0.15);
-    height: 60px;
-    z-index: 50;
+    z-index: 100;
+    pointer-events: none;
+    padding: 0 16px;
   }
 
-  .nav-bawah a {
+  .nav-kapsul {
+    pointer-events: auto;
     display: flex;
-    flex-direction: column;
     align-items: center;
-    justify-content: center;
-    color: #A0C2B4;
-    text-decoration: none;
-    font-size: 0.75rem;
-    gap: 3px;
+    gap: 6px;
+    background: rgba(12, 59, 46, 0.94);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    padding: 6px 8px;
+    border-radius: 9999px;
+    border: 1px solid rgba(184, 151, 90, 0.4);
+    box-shadow: 0 10px 32px rgba(0, 0, 0, 0.38), 0 2px 8px rgba(0, 0, 0, 0.2);
+    max-width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    overscroll-behavior-x: contain;
+    touch-action: pan-x;
+    cursor: grab;
   }
 
-  .nav-bawah a.aktif {
-    color: #fff;
-    background: rgba(255,255,255,0.08);
+  .nav-kapsul:active {
+    cursor: grabbing;
+  }
+
+  .nav-kapsul::-webkit-scrollbar {
+    display: none;
+  }
+
+  .item-kapsul {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    border-radius: 9999px;
+    color: #B5D2C3;
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 500;
+    flex-shrink: 0;
+    user-select: none;
+    -webkit-user-select: none;
+    transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+    white-space: nowrap;
+    min-height: 40px;
+  }
+
+  .item-kapsul:hover {
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.08);
+  }
+
+  .item-kapsul.aktif {
+    color: #ffffff;
+    background: var(--hijau);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25), 0 2px 6px rgba(0, 0, 0, 0.25);
+    font-weight: 600;
   }
 }
