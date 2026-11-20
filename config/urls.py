@@ -23,5 +23,6 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("masuk/", auth_views.LoginView.as_view(template_name="masuk.html"), name="login"),
     path("keluar/", auth_views.LogoutView.as_view(), name="logout"),
+    path("api/", include("pembelian.api.urls")),
     path("", include("pembelian.urls")),
 ]
