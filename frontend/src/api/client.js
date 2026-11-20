@@ -107,4 +107,30 @@ export const api = {
     get: (tanggal) =>
       apiFetch(`/api/ringkasan/${tanggal ? '?tanggal=' + tanggal : ''}`),
   },
+  pabrik: {
+    list: () => apiFetch('/api/pabrik/'),
+    create: (data) => apiFetch('/api/pabrik/', { method: 'POST', body: JSON.stringify(data) }),
+    update: (id, data) => apiFetch(`/api/pabrik/${id}/`, { method: 'PUT', body: JSON.stringify(data) }),
+    delete: (id) => apiFetch(`/api/pabrik/${id}/`, { method: 'DELETE' }),
+  },
+  penjualan: {
+    list: (params = {}) => {
+      const q = new URLSearchParams();
+      if (params.pabrik) q.set('pabrik', params.pabrik);
+      if (params.tanggal) q.set('tanggal', params.tanggal);
+      if (params.dibatalkan !== undefined) q.set('dibatalkan', params.dibatalkan);
+      return apiFetch(`/api/penjualan/${q.toString() ? '?' + q.toString() : ''}`);
+    },
+    get: (id) => apiFetch(`/api/penjualan/${id}/`),
+    create: (data) => apiFetch('/api/penjualan/', { method: 'POST', body: JSON.stringify(data) }),
+    update: (id, data) => apiFetch(`/api/penjualan/${id}/`, { method: 'PUT', body: JSON.stringify(data) }),
+    batalkan: (id, alasan) =>
+      apiFetch(`/api/penjualan/${id}/batalkan/`, {
+        method: 'POST',
+        body: JSON.stringify({ alasan }),
+      }),
+  },
+  stok: {
+    get: () => apiFetch('/api/stok/'),
+  },
 };
